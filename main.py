@@ -16,12 +16,16 @@ class Nodo:
         self.intersecciones = []
 
     def agregarInterseccion(self, interseccion) -> None:
-        # self.intersecciones.append( ( nodoDestino, peso ) )
         self.intersecciones.append(
             {
                 "data": interseccion,
             }
         )
+
+    def mostrarNodo(self):
+        print(self.id, self.nombre, self.cantidad_intersecciones)
+        for interseccion in self.intersecciones:
+            print(interseccion)
 
 
 class Grafo:
@@ -29,28 +33,31 @@ class Grafo:
         self.calles = calles
         self.intersecciones = intersecciones
         self.G = []
+        self.generar_grafo()
 
     def generar_grafo(self):
         interseccion_actual = 0
-        for (id, nombre, n_intersecciones) in self.calles.split(";"):
+        for (id, nombre, n_intersecciones) in self.calles:
             nodo = Nodo(id, nombre, n_intersecciones)
             for i in range(interseccion_actual, interseccion_actual + n_intersecciones):
                 nodo.agregarInterseccion(self.intersecciones[i])
             interseccion_actual += n_intersecciones
-            self.agregarNodo(self, nodo)
+            self.agregarNodo(nodo)
 
     def agregarNodo(self, nodo):
         self.G.append(nodo)
 
+    def getGraph(self):
+        return self.G
+
 
 # Crear una funcion para leer un archivo csv y devolver una lista de tuplas con los datos de cada linea
-def leer_archivo_formato(archivo, formato):
+def leer_archivo_formato(archivo, formatear):
     with open(archivo, "r", encoding="utf-8-sig") as f:
         lista = []
         for linea in f:
-            # if linea.find("\"") != -1
             data = linea.strip().split(";")
-            formato(lista, data)
+            formatear(lista, data)
     return lista
 
 
@@ -72,16 +79,20 @@ def obtener_formato_intersecciones(lista, data):
             int(data[8]),
             float(data[9]),
             float(data[10]),
+            float(data[11]),
+            float(data[12]),
+            float(data[13]),
         )
     )
 
 
 calles = leer_archivo_formato("assets/Lima-calles.csv", obtener_formato_calles)
-print(calles)
 
-# intersecciones = leer_archivo_formato("assets/Lima-intersecciones.csv", obtener_formato_intersecciones)
-# print(intersecciones)
+intersecciones = leer_archivo_formato("assets/Lima-intersecciones.csv", obtener_formato_intersecciones)
 
-# Graph = Grafo(calles, intersecciones)
+Graph = Grafo(calles, intersecciones)
 
-# print(Graph)
+G = Graph.getGraph()
+
+# G[0].mostrarNodo()
+G[1].mostrarNodo()
