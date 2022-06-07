@@ -101,15 +101,15 @@ def obtener_formato_intersecciones(lista, data, hora):
             float(data[13]),
             # Longitud de 7
             float(data[14]),
-            # Costo 1 modificado: Distancia(km)/velocidad(km/h)
-            float(data[6]) / float(data[7]),
+            # Costo 1 modificado: (Distancia(km)/velocidad(km/h))*3
+            (float(data[6]) / float(data[7]))*3,
             # Costo 2 modificado: (Distancia entre 2 puntos x1000000)= raiz[ (latitud1-latitud2)^2+(longitud1-longitud2)^2]X1000000
             (
                 (math.sqrt((float(data[11]) - float(data[13])) ** 2 + (float(data[12]) - float(data[14])) ** 2))
                 * 1000000
             ),
-            # Costo Factor trafico:Distancia*1000(km)/velocidad((100-h)/100)
-            float(data[7]) / (int(data[8]) * ((100 - hora) / 100)),
+            # Costo Factor trafico:Distancia(km)*650000/velocidad((100-h)/100)
+            float(data[7])*650000 / (int(data[8]) * ((100 - hora) / 100)),
         )
     )
 
