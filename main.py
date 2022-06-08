@@ -7,7 +7,7 @@
   Destino -> -12.0460958;-77.0430896
 """
 import math
-
+import csv
 
 class Nodo:
     def __init__(self, id, nombre, intersecciones) -> None:
@@ -95,10 +95,13 @@ def obtener_formato_intersecciones(lista, data, hora):
             float(data[7]),
             # Velocidad km/h permitida
             int(data[8]),
-            # Costo 1
-            float(data[9]),
-            # Costo 2
-            float(data[10]),
+           # Costo 1 modificado: (Distancia(km)/velocidad(km/h))
+            (float(data[7]) / float(data[8]))*500000,
+           # Costo 2 modificado: (Distancia entre 2 puntos x1000000)= raiz[ (latitud1-latitud2)^2+(longitud1-longitud2)^2]X1000000
+            (
+                (math.sqrt((float(data[11]) - float(data[13])) ** 2 + (float(data[12]) - float(data[14])) ** 2))
+                * 1000000
+            ),
             # Latitud de 6
             float(data[11]),
             # Longitud de 6
@@ -107,13 +110,6 @@ def obtener_formato_intersecciones(lista, data, hora):
             float(data[13]),
             # Longitud de 7
             float(data[14]),
-            # Costo 1 modificado: (Distancia(km)/velocidad(km/h))*3
-            (float(data[6]) / float(data[7])) * 3,
-            # Costo 2 modificado: (Distancia entre 2 puntos x1000000)= raiz[ (latitud1-latitud2)^2+(longitud1-longitud2)^2]X1000000
-            (
-                (math.sqrt((float(data[11]) - float(data[13])) ** 2 + (float(data[12]) - float(data[14])) ** 2))
-                * 1000000
-            ),
             # Costo Factor trafico:Distancia(km)*650000/velocidad((100-h)/100)
             float(data[7]) * 650000 / (int(data[8]) * ((100 - hora) / 100)),
         )
@@ -137,3 +133,12 @@ for nodo in Ciudad:
         print("\n--------------------------------------------------------------------------------------------")
     else:
         break
+
+
+
+myFile = open('assets/Lima-calles-intersecciones.csv', 'w', newline='')
+with myFile:
+    writer = csv.writer(myFile, delimiter = ";")
+    writer.writerows(intersecciones)
+     
+print("Writing complete")
