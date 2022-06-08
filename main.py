@@ -9,6 +9,7 @@
 import math
 import csv
 
+
 class Nodo:
     def __init__(self, id, nombre, intersecciones) -> None:
         self.id = id
@@ -66,7 +67,7 @@ def leer_archivo_calles(archivo, formatear_calles):
 
 
 def leer_archivo_intersecciones(archivo, formatear_intersecciones, hora):
-    with open(archivo, "r", encoding="utf-8-sig") as f:
+    with open(archivo, "r", encoding='latin-1') as f:
         lista = []
         for linea in f:
             data = linea.strip().split(";")
@@ -95,9 +96,9 @@ def obtener_formato_intersecciones(lista, data, hora):
             float(data[7]),
             # Velocidad km/h permitida
             int(data[8]),
-           # Costo 1 modificado: (Distancia(km)/velocidad(km/h))
-            (float(data[7]) / float(data[8]))*500000,
-           # Costo 2 modificado: (Distancia entre 2 puntos x1000000)= raiz[ (latitud1-latitud2)^2+(longitud1-longitud2)^2]X1000000
+            # Costo 1 modificado: (Distancia(km)/velocidad(km/h))
+            (float(data[7]) / float(data[8])) * 500000,
+            # Costo 2 modificado: (Distancia entre 2 puntos x1000000)= raiz[ (latitud1-latitud2)^2+(longitud1-longitud2)^2]X1000000
             (
                 (math.sqrt((float(data[11]) - float(data[13])) ** 2 + (float(data[12]) - float(data[14])) ** 2))
                 * 1000000
@@ -118,7 +119,9 @@ def obtener_formato_intersecciones(lista, data, hora):
 
 calles = leer_archivo_calles("assets/Lima-calles.csv", obtener_formato_calles)
 hora = int(input("Digite la hora: "))
-intersecciones = leer_archivo_intersecciones("assets/Lima-intersecciones.csv", obtener_formato_intersecciones, hora)
+intersecciones = leer_archivo_intersecciones(
+    "assets/Lima-calles-intersecciones.csv", obtener_formato_intersecciones, hora
+)
 
 Graph = Grafo(calles, intersecciones)
 
@@ -135,10 +138,9 @@ for nodo in Ciudad:
         break
 
 
+# myFile = open('assets/Lima-calles-intersecciones.csv', 'w', newline='')
+# with myFile:
+#     writer = csv.writer(myFile, delimiter = ";")
+#     writer.writerows(intersecciones)
 
-myFile = open('assets/Lima-calles-intersecciones.csv', 'w', newline='')
-with myFile:
-    writer = csv.writer(myFile, delimiter = ";")
-    writer.writerows(intersecciones)
-     
-print("Writing complete")
+# print("Writing complete")
