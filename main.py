@@ -137,10 +137,12 @@ for nodo in Ciudad:
     else:
         break
 
+#En este parte creamos el nuevo docuemento con los costos actualizados y el factor trafico agregado
+"""
+myFile = open('assets/Lima-calles-intersecciones.csv', 'w', newline='')
+with myFile:
+    writer = csv.writer(myFile, delimiter = ";")
+    writer.writerows(intersecciones)
 
-# myFile = open('assets/Lima-calles-intersecciones.csv', 'w', newline='')
-# with myFile:
-#     writer = csv.writer(myFile, delimiter = ";")
-#     writer.writerows(intersecciones)
-
-# print("Writing complete")
+ print("Writing complete")
+"""
